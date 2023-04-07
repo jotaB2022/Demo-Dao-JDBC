@@ -56,16 +56,8 @@ public class SellerDaoJDBC implements SellerDao {
 		rs = st.executeQuery();
 		
 		if(rs.next()) {
-			Department dep = new Department();
-			dep.setId(rs.getInt("DepartmentId"));
-			dep.setName(rs.getString("DepName"));
-			Seller seller = new Seller();
-			seller.setId(rs.getInt("Id"));
-			seller.setName(rs.getString("Name"));
-			seller.setEmail(rs.getString("Email"));
-			seller.setBaseSalary(rs.getDouble("BaseSalary"));
-			seller.setBirthday(rs.getDate("BirthDate"));
-			seller.setDepartment(dep);
+			Department dep = instantiateDepartment(rs);
+			Seller seller = instantiateSeller(rs, dep);
 			
 			return seller;
 		}
@@ -82,6 +74,27 @@ public class SellerDaoJDBC implements SellerDao {
 		
 		
 		
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException  {
+		Seller seller = new Seller();
+		seller.setId(rs.getInt("Id"));
+		seller.setName(rs.getString("Name"));
+		seller.setEmail(rs.getString("Email"));
+		seller.setBaseSalary(rs.getDouble("BaseSalary"));
+		seller.setBirthday(rs.getDate("BirthDate"));
+		seller.setDepartment(dep);
+		
+		return seller;
+	}
+
+	private Department instantiateDepartment(ResultSet rs)  throws SQLException {
+		
+		Department dep =  new Department();
+			dep.setId(rs.getInt("DepartmentId"));
+			dep.setName(rs.getString("DepName"));
+		
+			return dep;
 	}
 
 	@Override
